@@ -66,6 +66,6 @@ os_sem_give(os_sem_t sem)
 }
 
 #else
-int not_empty;
+static int not_empty;
 #endif
 

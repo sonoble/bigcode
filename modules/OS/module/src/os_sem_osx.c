@@ -25,6 +25,6 @@
 #define OS_CONFIG_INCLUDE_POSIX 1
 #include "os_sem_posix.c"
 #else
-int not_empty;
+static int not_empty;
 #endif
 
