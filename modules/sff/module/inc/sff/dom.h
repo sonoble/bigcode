@@ -26,6 +26,7 @@
 #define __SFF_DOM_H__
 
 #include <sff/sff.h>
+#include <cjson/cJSON.h>
 
 #define SFF_DOM_CHANNEL_COUNT_MAX 4
 
