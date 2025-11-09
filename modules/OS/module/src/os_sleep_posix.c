@@ -35,6 +35,6 @@ os_sleep_usecs(uint64_t usecs)
 
 
 #else
-static int __not_empty__;
+static int __not_empty__ __attribute__((unused));
 #endif
 

@@ -259,6 +259,6 @@ os_sem_take_timeout(os_sem_t sem, uint64_t usecs)
 }
 
 #else
-static int not_empty;
+static int not_empty __attribute__((unused));
 #endif
 

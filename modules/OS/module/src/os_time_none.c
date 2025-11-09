@@ -41,6 +41,6 @@ os_time_thread(void)
 }
 
 #else
-static int __not_empty__;
+static int __not_empty__ __attribute__((unused));
 #endif
 
