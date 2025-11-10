@@ -136,7 +136,7 @@ sff_tool(int argc, char* argv[])
 }
 
 #else
-int __not_empty__;
+static int __not_empty__ __attribute__((unused));
 #endif
 
 
