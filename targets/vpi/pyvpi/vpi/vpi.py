@@ -1,48 +1,45 @@
-#!/usr/bin/python
-################################################################
-#
-#        Copyright 2013, Big Switch Networks, Inc.
-#
-# Licensed under the Eclipse Public License, Version 1.0 (the
-# "License"); you may not use this file except in compliance
-# with the License. You may obtain a copy of the License at
-#
-#        http://www.eclipse.org/legal/epl-v10.html
-#
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-# either express or implied. See the License for the specific
-# language governing permissions and limitations under the
-# License.
-#
-################################################################
-#
-# Wrapper object class for use with the pyvpi library.
-#
-################################################################
+#!/usr/bin/python3
+"""VPI (Virtual Port Interface) wrapper module.
+
+Copyright 2013, Big Switch Networks, Inc.
+
+Licensed under the Eclipse Public License, Version 1.0 (the
+"License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at
+
+    http://www.eclipse.org/legal/epl-v10.html
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+either express or implied. See the License for the specific
+language governing permissions and limitations under the
+License.
+
+Wrapper object class for use with the pyvpi library.
+"""
+
 import sys
 
 # Hack. For the pyvpi.so library from the libvpi package.
 sys.path.append("/usr/lib")
 import pyvpi
 
-#
-# Objectify the pyvpi library module.
-#
-class Vpi(object):
 
-    def __init__(self, createSpec):
-        self.v = pyvpi.Create(createSpec);
+class Vpi:
+    """Wrapper class for the pyvpi library."""
+
+    def __init__(self, create_spec):
+        self.v = pyvpi.Create(create_spec)
 
     def NameGet(self):
         return pyvpi.NameGet(self.v)
 
-    def NameSet(self, newName):
-        return pyvpi.NameSet(self.v, newName)
+    def NameSet(self, new_name):
+        return pyvpi.NameSet(self.v, new_name)
 
     def GetCreateSpec(self):
-        return PyPVI.GetCreateSpec(self.v)
+        return pyvpi.GetCreateSpec(self.v)
 
     def DescriptorGet(self):
         return pyvpi.DescriptorGet(self.v)
@@ -59,14 +56,14 @@ class Vpi(object):
     def GetSendToSpec(self):
         return pyvpi.GetSendToSpec(self.v)
 
-
     def AddRecvListener(self, listener):
-        if type(listener) == str:
+        if isinstance(listener, str):
             return pyvpi.AddRecvListenerSpec(self.v, listener)
         else:
             return pyvpi.AddRecvListener(self.v, listener)
+
     def RemoveRecvListener(self, listener):
-        if type(listener) == str:
+        if isinstance(listener, str):
             return pyvpi.RemoveRecvListenerSpec(self.v, listener)
         else:
             return pyvpi.RemoveRecvListener(self.v, listener)
@@ -78,13 +75,13 @@ class Vpi(object):
         return pyvpi.RecvListenersDrop(self.v)
 
     def AddSendListener(self, listener):
-        if type(listener) == str:
+        if isinstance(listener, str):
             return pyvpi.AddSendListenerSpec(self.v, listener)
         else:
             return pyvpi.AddSendListener(self.v, listener)
 
     def RemoveSendListener(self, listener):
-        if type(listener) == str:
+        if isinstance(listener, str):
             return pyvpi.RemoveSendListenerSpec(self.v, listener)
         else:
             return pyvpi.RemoveSendListener(self.v, listener)
@@ -96,13 +93,13 @@ class Vpi(object):
         return pyvpi.SendListenersDrop(self.v)
 
     def AddSendRecvListener(self, listener):
-        if type(listener) == str:
+        if isinstance(listener, str):
             return pyvpi.AddSendRecvListenerSpec(self.v, listener)
         else:
             return pyvpi.AddSendRecvListener(self.v, listener)
 
     def RemoveSendRecvListener(self, listener):
-        if type(listener) == str:
+        if isinstance(listener, str):
             return pyvpi.RemoveSendRecvListenerSpec(self.v, listener)
         else:
             return pyvpi.RemoveSendRecvListener(self.v, listener)
@@ -123,37 +120,34 @@ class Vpi(object):
         return pyvpi.Ioctl(self.v, cmd, data)
 
     def Recv(self, block):
-        return pyvpi.Recv(self.v, block);
+        return pyvpi.Recv(self.v, block)
 
     def Drain(self):
-        return pyvpi.Drain(self.v);
+        return pyvpi.Drain(self.v)
 
     def ConfigShow(self):
         return pyvpi.ConfigShow(self.v)
 
 
+class VpiBridge:
+    """Bridge between two VPI interfaces."""
 
-class VpiBridge(object):
-
-    def __init__(self, v1In, v2In):
-        #
+    def __init__(self, v1_in, v2_in):
         # v1 and or v2 can be Vpi objects or create specs.
-        #
-        if isinstance(v1In, Vpi):
-            self.v1 = v1In
+        if isinstance(v1_in, Vpi):
+            self.v1 = v1_in
         else:
-            self.v1 = Vpi(v1In);
+            self.v1 = Vpi(v1_in)
 
-        if isinstance(v2In, Vpi):
-            self.v2 = v2In
+        if isinstance(v2_in, Vpi):
+            self.v2 = v2_in
         else:
-            self.v2 = Vpi(v2In)
+            self.v2 = Vpi(v2_in)
 
-        print self.v1.NameGet()
-        print self.v2.NameGet()
+        print(self.v1.NameGet())
+        print(self.v2.NameGet())
 
-        self.bridge = pyvpi.BridgeCreate(self.v1.v, self.v2.v);
-
+        self.bridge = pyvpi.BridgeCreate(self.v1.v, self.v2.v)
 
     def Start(self):
         return pyvpi.BridgeStart(self.bridge)
@@ -162,40 +156,26 @@ class VpiBridge(object):
         return pyvpi.BridgeStop(self.bridge)
 
 
-class VpiTool(object):
+class VpiTool:
+    """Utility class for VPI operations."""
 
     def __init__(self):
         pass
 
     def Bridge(self, v1, v2):
-        rv = VpiBridge(v1, v2);
-        rv.Start();
-        return rv;
+        rv = VpiBridge(v1, v2)
+        rv.Start()
+        return rv
 
     def Dump(self, v1):
-        v = Vpi(v1);
-        count = 0;
-        while(True):
-            data = v.Recv(True);
-            print "[%.3d]" % count
-            print data
-            count = count+1;
+        v = Vpi(v1)
+        count = 0
+        while True:
+            data = v.Recv(True)
+            print("[%.3d]" % count)
+            print(data)
+            count = count + 1
 
     def Send(self, v1, data):
         v = Vpi(v1)
         v.Send(data)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,14 +1,21 @@
 """enums.py
 
 Enumerations from the SFF auto.yml.
+
+This module defines SFF (Small Form Factor) enumerations for
+optics module types, capabilities, and DOM specifications.
 """
 
-class Enumeration(object):
+
+class Enumeration:
+    """Base class for SFF enumerations with name lookup."""
+
     @classmethod
-    def name(klass, value):
-        for (k, v) in klass.__dict__.iteritems():
-            if v == value:
-                return k
+    def name(cls, value):
+        """Look up the name of an enumeration value."""
+        for key, val in cls.__dict__.items():
+            if val == value:
+                return key
         return None
 
 # <auto.start.pyenum(ALL).define>
